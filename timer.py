@@ -8,7 +8,7 @@ def timer(func):
     Use by prepending @timer to the target function definition.
     Logs start and finish time in y/m/d h:m:s and keeps track of duration in seconds.
     Wrapper returns a tuple containing the original results and a dictionary containing start, finish, and duration.
-    
+
     :param func: any function
     :return: func with timing wrapper
     """

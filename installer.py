@@ -2,14 +2,17 @@
 import pip
 
 
-def installer(package, params=['--user', '--upgrade']):
+def installer(packages, params=['--user', '--upgrade']):
     """Update packages using pip
 
-    :param package: package name
+    :param packages: package name or list of package names
     :param params: pip command line arguments
     :return:
     """
-    pip.main(['install', package] + params)
+    if type(packages) is list:
+        pip.main(['install'] + packages + params)
+    elif type(packages) is str:
+        pip.main(['install', packages] + params)
 
 
 packages = ['pip',
@@ -43,5 +46,4 @@ packages = ['pip',
             'pytest']  # unit testing
 
 if __name__ == '__main__':
-    for package in packages:
-        installer(package)
+        installer(packages)
