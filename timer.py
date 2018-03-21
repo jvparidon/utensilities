@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# jvparidon@gmail.com
 from time import time, localtime, strftime
 
 
