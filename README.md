@@ -1,2 +1,2 @@
 # utensilities
-Utensils for code.
+Utensils in code.
