@@ -1,2 +1,2 @@
 # utensilities
-Utensils in code.
+Small utilities.
