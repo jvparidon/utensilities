@@ -1,26 +1,52 @@
 # -*- coding: utf-8 -*-
 # jvparidon@gmail.com
-from time import time, localtime, strftime
+import time
+import functools
+import logging
+logging.basicConfig(format='[{levelname}] {message}', style='{', level=logging.INFO)
 
 
 def timer(func):
     """Decorator to add timing wrapper to other functions.
 
-    Use by prepending @timer to the target function definition or wrapping a block of code in timer().
-    Logs start and finish time in y/m/d h:m:s and keeps track of duration in seconds.
+    Use by prepending `@timer` to the target function definition.
+    Logs start and finish time in `y/m/d h:m:s` and keeps track of duration in seconds.
     Wrapper returns a tuple containing the original results and a dictionary containing start, finish, and duration.
-    NOTE: Use for real-world timing. For optimization purposes use timeit.
 
     :param func: any function
     :return: func with timing wrapper
     """
+    @functools.wraps(func)
     def timed_func(*args, **kwargs):
-        t = {}
-        t['start'] = strftime('%Y/%m/%d %H:%M:%S', localtime())
-        t0 = time()
+        t = dict()
+        t['start'] = time.strftime('%Y/%m/%d %H:%M:%S', time.localtime())
+        t0 = time.time()
         res = func(*args, **kwargs)
-        t1 = time()
-        t['finish'] = strftime('%Y/%m/%d %H:%M:%S', localtime())
+        t1 = time.time()
+        t['finish'] = time.strftime('%Y/%m/%d %H:%M:%S', time.localtime())
         t['duration'] = t1 - t0
         return res, t
+    return timed_func
+
+
+def log_timer(func):
+    """Decorator to add logging timer to other functions.
+
+    Use by prepending `@log_timer` to the target function definition.
+    Logs function name and duration in seconds to level `INFO`.
+
+    :param func: any function
+    :return: func with logging timer
+    """
+    @functools.wraps(func)
+    def timed_func(*args, **kwargs):
+        formatstr = '%Y/%m/%d %H:%M:%S'
+        t0 = time.localtime()
+        res = func(*args, **kwargs)
+        t1 = time.localtime()
+        t = t1 - t0
+        t0 = time.strftime(formatstr, t0)
+        t1 = time.strftime(formatstr, t1)
+        logging.info(f'{func} ran in {t:.3f} seconds (started {t1}, finished {t0}')
+        return res
     return timed_func
